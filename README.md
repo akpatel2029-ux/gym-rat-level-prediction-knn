@@ -1,126 +1,112 @@
-# ðŸ‹ï¸ P24 - Gym Rat Level Prediction Using KNN
+# P24 - Gym Rat Level Prediction Using KNN
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
-![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?logo=jupyter)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-green?logo=scikit-learn)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
-A complete end-to-end machine learning project that predicts a gym member's **Experience Level** (Beginner / Intermediate / Advanced) using the **K-Nearest Neighbours (KNN)** classification algorithm.
-
-> âœ… No CSV upload required â€” all data is embedded directly in the notebook.  
-> âœ… Runs on Google Colab and Jupyter Notebook out of the box.
+A complete end-to-end machine learning project that predicts a gym member Experience Level using the K-Nearest Neighbours (KNN) classification algorithm. All data is embedded directly in the notebook. No CSV upload required. Runs on Google Colab and Jupyter Notebook.
 
 ---
 
-## ðŸ“Œ Problem Statement
+## Problem Statement
 
-Given a gym member's biometric and workout data, predict their fitness experience level:
+Given a gym member's biometric and workout data, predict their fitness experience level.
 
-| Label | Meaning |
-|-------|---------|
-| 1 | Beginner |
-| 2 | Intermediate |
-| 3 | Advanced |
-
----
-
-## ðŸ“Š Dataset
-
-The dataset contains **100 synthetic gym member records** with the following features:
-
-| Feature | Description |
-|---------|-------------|
-| Age | Member's age in years |
-| Gender | Male / Female |
-| Weight (kg) | Body weight |
-| Height (m) | Body height |
-| Max_BPM | Maximum heart rate during workout |
-| Avg_BPM | Average heart rate during workout |
-| Resting_BPM | Resting heart rate |
-| Session_Duration (hours) | Length of workout session |
-| Calories_Burned | Calories burned per session |
-| Workout_Type | Cardio / Yoga / Strength / HIIT |
-| Fat_Percentage | Body fat percentage |
-| Water_Intake (liters) | Daily water intake |
-| Workout_Frequency (days/week) | Days trained per week |
-| **Experience_Level** | **Target variable (1 / 2 / 3)** |
+| Label | Meaning      |
+|-------|--------------|
+| 1     | Beginner     |
+| 2     | Intermediate |
+| 3     | Advanced     |
 
 ---
 
-## ðŸ” Pipeline Overview
+## Dataset
+
+The dataset contains 100 synthetic gym member records with the following features.
+
+| Feature                        | Description                          |
+|--------------------------------|--------------------------------------|
+| Age                            | Member age in years                  |
+| Gender                         | Male or Female                       |
+| Weight (kg)                    | Body weight                          |
+| Height (m)                     | Body height                          |
+| Max_BPM                        | Maximum heart rate during workout    |
+| Avg_BPM                        | Average heart rate during workout    |
+| Resting_BPM                    | Resting heart rate                   |
+| Session_Duration (hours)       | Length of workout session            |
+| Calories_Burned                | Calories burned per session          |
+| Workout_Type                   | Cardio, Yoga, Strength, or HIIT      |
+| Fat_Percentage                 | Body fat percentage                  |
+| Water_Intake (liters)          | Daily water intake                   |
+| Workout_Frequency (days/week)  | Days trained per week                |
+| Experience_Level               | Target variable: 1, 2, or 3         |
+
+---
+
+## Pipeline Overview
 
 ```
-Raw Data â†’ Cleaning â†’ EDA â†’ Feature Engineering
-       â†’ Train-Test Split â†’ Feature Selection (SelectKBest)
-       â†’ Feature Scaling (StandardScaler)
-       â†’ KNN (Baseline + Hyperparameter Tuning)
-       â†’ Final Model â†’ Predictions â†’ Save Results
+Raw Data
+  -> Data Cleaning
+  -> Exploratory Data Analysis
+  -> Feature Engineering
+  -> Train-Test Split (80/20 stratified)
+  -> Feature Selection (SelectKBest, ANOVA F-test, top 15)
+  -> Feature Scaling (StandardScaler)
+  -> Baseline KNN (k=5, Euclidean, scaled)
+  -> Hyperparameter Tuning (k, metric, scaling)
+  -> Final Model (best by Macro F1)
+  -> Sample Predictions
+  -> Save Results to CSV
 ```
-
-### Steps in Detail
-
-1. **Dataset** â€” Hardcoded directly in Python, no external file needed
-2. **Data Cleaning** â€” Deduplication, median/mode imputation
-3. **EDA** â€” Class distribution bar chart, feature histograms, boxplots, correlation heatmap
-4. **Feature Engineering** â€” New feature `Water_per_kg`, one-hot encoding
-5. **Train-Test Split** â€” 80/20 stratified split
-6. **Feature Selection** â€” SelectKBest with ANOVA F-test (top 15 features)
-7. **Feature Scaling** â€” StandardScaler (z-score normalisation)
-8. **Model Evaluation** â€” Accuracy, Precision, Recall, F1, Specificity, AUC (macro)
-9. **Baseline KNN** â€” `k=5`, Euclidean distance, scaled features
-10. **Hyperparameter Tuning** â€” Grid over `k âˆˆ {1,3,5,7,9,11,13,15}`, Euclidean vs Manhattan, scaled vs unscaled
-11. **Final Model** â€” Best setting selected by Macro F1 score
-12. **Sample Predictions** â€” Predictions for 3 example inputs
-13. **Save Results** â€” All metrics exported to `knn_model_comparison.csv`
 
 ---
 
-## ðŸ“ˆ Results
+## Steps in Detail
 
-All model configurations are compared in the bar chart generated by the notebook. The best model is automatically selected by **Macro F1 score** â€” a robust metric for imbalanced multi-class problems.
+1. Dataset - Data hardcoded in Python. No external file needed.
+2. Data Cleaning - Remove duplicates. Fill missing numeric values with median, categorical with mode.
+3. Exploratory Data Analysis - Class distribution bar chart, feature histograms, boxplots per class, correlation heatmap.
+4. Feature Engineering - New feature Water_per_kg (water intake divided by body weight). One-hot encoding for categorical columns.
+5. Train-Test Split - 80 percent train, 20 percent test. Stratified by target class.
+6. Feature Selection - SelectKBest with ANOVA F-test. Selects top 15 features.
+7. Feature Scaling - StandardScaler applied to training data, then applied to test data.
+8. Model Evaluation - Reports Accuracy, Precision (macro), Recall (macro), F1 (macro), Specificity (per-class average), AUC-ROC (macro OvR).
+9. Baseline KNN - k=5, Euclidean distance, scaled features. Confusion matrix and classification report printed.
+10. Hyperparameter Tuning - Tests k values 1, 3, 5, 7, 9, 11, 13, 15. Tests Euclidean and Manhattan distance. Tests scaled and unscaled inputs.
+11. Final Model - Best configuration selected automatically by Macro F1 score. Final confusion matrix and classification report printed.
+12. Sample Predictions - Predicts experience level for 3 example inputs.
+13. Save Results - All model comparison metrics saved to knn_model_comparison.csv.
 
-Metrics reported for each setting:
+---
+
+## Metrics Reported
+
 - Accuracy
-- Precision (macro)
-- Recall (macro)
-- F1 Score (macro)
+- Precision (macro average)
+- Recall (macro average)
+- F1 Score (macro average)
 - Specificity (per-class average)
-- AUC-ROC (macro OvR)
+- AUC-ROC (macro one-vs-rest)
 
 ---
 
-## ðŸš€ How to Run
+## How to Run
 
-### Option 1 â€” Google Colab (Recommended)
+### Google Colab
 
-1. Open [Google Colab](https://colab.research.google.com/)
-2. Upload `P24_Gym_Rat_Level_Prediction_KNN.ipynb`
-3. Click **Runtime â†’ Run All**
+1. Open https://colab.research.google.com
+2. Upload P24_Gym_Rat_Level_Prediction_KNN.ipynb
+3. Click Runtime then Run All
 
-### Option 2 â€” Jupyter Notebook (Local)
+### Jupyter Notebook (Local)
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/akpatel2029/gym-rat-level-prediction-knn.git
+git clone https://github.com/akpatel2029-ux/gym-rat-level-prediction-knn.git
 cd gym-rat-level-prediction-knn
-
-# 2. Install dependencies
 pip install numpy pandas matplotlib seaborn scikit-learn notebook
-
-# 3. Launch Jupyter
 jupyter notebook P24_Gym_Rat_Level_Prediction_KNN.ipynb
 ```
 
-### Option 3 â€” Script (Python only)
-
-Copy the cell contents into a `.py` file and run:
-```bash
-python P24_Gym_Rat_Level_Prediction_KNN.py
-```
-
 ---
 
-## ðŸ“¦ Requirements
+## Requirements
 
 ```
 numpy
@@ -128,50 +114,41 @@ pandas
 matplotlib
 seaborn
 scikit-learn
-notebook       # for Jupyter
+notebook
 ```
 
-Install all at once:
+Install all:
+
 ```bash
 pip install numpy pandas matplotlib seaborn scikit-learn notebook
 ```
 
 ---
 
-## ðŸ“ Project Structure
+## Project Structure
 
 ```
 gym-rat-level-prediction-knn/
-â”‚
-â”œâ”€â”€ P24_Gym_Rat_Level_Prediction_KNN.ipynb   # Main notebook
-â”œâ”€â”€ knn_model_comparison.csv                  # Auto-generated results (after run)
-â””â”€â”€ README.md                                 # This file
+    P24_Gym_Rat_Level_Prediction_KNN.ipynb
+    knn_model_comparison.csv
+    README.md
 ```
 
 ---
 
-## ðŸ§  Algorithm: K-Nearest Neighbours (KNN)
+## Algorithm: K-Nearest Neighbours
 
-KNN is a non-parametric, instance-based learning algorithm that classifies a data point based on the majority class among its **k nearest neighbours** in feature space.
+KNN is a non-parametric, instance-based learning algorithm. It classifies a data point based on the majority class among its k nearest neighbours in feature space.
 
-**Key decisions explored in this project:**
-- **k value** â€” controls the bias-variance tradeoff
-- **Distance metric** â€” Euclidean vs Manhattan
-- **Feature scaling** â€” KNN is sensitive to feature magnitudes; StandardScaler is applied
+Key choices explored in this project:
 
----
-
-## ðŸ“œ License
-
-This project is released under the [MIT License](https://opensource.org/licenses/MIT).
+- k value: controls the bias-variance tradeoff
+- Distance metric: Euclidean vs Manhattan
+- Feature scaling: KNN is sensitive to feature magnitudes, so StandardScaler is applied and compared against unscaled inputs
 
 ---
 
-## ðŸ‘¤ Author
+## Author
 
-**AK Patel**  
-GitHub: [@akpatel2029](https://github.com/akpatel2029)
-
----
-
-> *"Train smarter. Predict better."* ðŸ‹ï¸â€â™‚ï¸
+AK Patel
+GitHub: https://github.com/akpatel2029-ux
