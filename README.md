@@ -152,3 +152,15 @@ Key choices explored in this project:
 
 AK Patel
 GitHub: https://github.com/akpatel2029-ux
+
+---
+
+## Project Guide
+
+This project was completed under the guidance of
+**Dr. Anjum Y. Mansuri**, Assistant Professor, Computer Applications,
+LJ Institute of Computer Applications, LJ University, Ahmedabad.
+
+GitHub: [@anjum-mansuri](https://github.com/anjum-mansuri)
+
+Course: ML-I Lab (IMCA Sem V) | Project ID: P24
